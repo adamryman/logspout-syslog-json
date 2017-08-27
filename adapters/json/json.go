@@ -25,7 +25,7 @@ type JSONAdapter struct {
 
 // NewLogstashAdapter creates a LogstashAdapter with UDP as the default transport.
 func NewJSONAdapter(route *router.Route) (router.LogAdapter, error) {
-	transport, found := router.AdapterTransports.Lookup(route.AdapterTransport("udp"))
+	transport, found := router.AdapterTransports.Lookup(route.AdapterTransport("tcp"))
 	if !found {
 		return nil, errors.New("unable to find adapter: " + route.Adapter)
 	}
@@ -95,4 +95,3 @@ type JSONMessage struct {
 	Source  string     `json:"source"`
 	Docker  DockerInfo `json:"docker"`
 }
-

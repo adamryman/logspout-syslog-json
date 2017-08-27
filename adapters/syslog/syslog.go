@@ -11,7 +11,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/dkiser/logspout-syslog-json/adapters/json"
+	"github.com/adamryman/logspout-syslog-json/adapters/json"
 	"github.com/gliderlabs/logspout/router"
 )
 
@@ -39,7 +39,7 @@ func getoptexists(name string) bool {
 }
 
 func NewSyslogAdapter(route *router.Route) (router.LogAdapter, error) {
-	transport, found := router.AdapterTransports.Lookup(route.AdapterTransport("udp"))
+	transport, found := router.AdapterTransports.Lookup(route.AdapterTransport("tpc"))
 	if !found {
 		return nil, errors.New("bad transport: " + route.Adapter)
 	}
@@ -101,8 +101,8 @@ type SyslogAdapter struct {
 func (a *SyslogAdapter) Stream(logstream chan *router.Message) {
 	for message := range logstream {
 		m := &SyslogMessage{message}
-        var err error = nil
-        var buf []byte = nil
+		var err error = nil
+		var buf []byte = nil
 		if a.json {
 			buf, err = m.RenderJSON(a.tmpl)
 			if err != nil {
@@ -221,11 +221,11 @@ func (m *SyslogMessage) RenderJSON(tmpl *template.Template) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-    // replace data with full json representation
-    m.Data = string(js)
-    buf := new(bytes.Buffer)
-    err2 := tmpl.Execute(buf, m)
-    if err2 != nil {
+	// replace data with full json representation
+	m.Data = string(js)
+	buf := new(bytes.Buffer)
+	err2 := tmpl.Execute(buf, m)
+	if err2 != nil {
 		return nil, err2
 	}
 	return buf.Bytes(), nil
