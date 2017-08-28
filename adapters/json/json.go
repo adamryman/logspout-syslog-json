@@ -43,7 +43,7 @@ func NewJSONAdapter(route *router.Route) (router.LogAdapter, error) {
 
 //func NewJSONMessage
 func NewJSONMessage(m *router.Message) ([]byte, error) {
-	dataMsg := map[string]interface{}{}
+	dataMsg := make(map[string]interface{})
 	var jsonErr error
 	if err := json.Unmarshal([]byte(m.Data), &dataMsg); err != nil {
 		dataMsg["message"] = m.Data
