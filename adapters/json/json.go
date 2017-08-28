@@ -45,7 +45,7 @@ func NewJSONAdapter(route *router.Route) (router.LogAdapter, error) {
 func NewJSONMessage(m *router.Message) ([]byte, error) {
 	dataMsg := map[string]interface{}{}
 	var jsonErr error
-	if err := json.Unmarshal([]byte(m.Data), dataMsg); err != nil {
+	if err := json.Unmarshal([]byte(m.Data), &dataMsg); err != nil {
 		dataMsg["message"] = m.Data
 		jsonErr = err
 	}
@@ -101,5 +101,5 @@ type JSONMessage struct {
 	Time      uint                   `json:"time"`
 	Source    string                 `json:"source"`
 	Docker    DockerInfo             `json:"docker"`
-	JSONError string                 `json:"json_error"`
+	JSONError string                 `json:"json_error,omitempty"`
 }
