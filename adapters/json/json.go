@@ -46,6 +46,7 @@ func NewJSONAdapter(route *router.Route) (router.LogAdapter, error) {
 func NewJSONMessage(m *router.Message) ([]byte, error) {
 	dataMsg := map[string]interface{}{}
 	if err := json.Unmarshal([]byte(m.Data), dataMsg); err != nil {
+		fmt.Println(m.Data)
 		fmt.Println(err)
 		dataMsg["message"] = m.Data
 	}
