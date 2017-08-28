@@ -94,8 +94,8 @@ type DockerInfo struct {
 
 // LogstashMessage is a simple JSON input to Logstash.
 type JSONMessage struct {
-	Message map[string]interface{} `json:"message"`
-	Time    uint                   `json:"time"`
-	Source  string                 `json:"source"`
-	Docker  DockerInfo             `json:"docker"`
+	Message map[string]interface{}
+	Time    uint       `json:"time"`
+	Source  string     `json:"source"`
+	Docker  DockerInfo `json:"docker"`
 }
