@@ -3,7 +3,6 @@ package json
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"net"
 	"os"
@@ -45,15 +44,16 @@ func NewJSONAdapter(route *router.Route) (router.LogAdapter, error) {
 //func NewJSONMessage
 func NewJSONMessage(m *router.Message) ([]byte, error) {
 	dataMsg := map[string]interface{}{}
+	var jsonErr error
 	if err := json.Unmarshal([]byte(m.Data), dataMsg); err != nil {
-		fmt.Println(m.Data)
-		fmt.Println(err)
 		dataMsg["message"] = m.Data
+		jsonErr = err
 	}
 	msg := JSONMessage{
-		Message: dataMsg,
-		Time:    uint(m.Time.Unix()),
-		Source:  hostname,
+		Message:   dataMsg,
+		JSONError: jsonErr.Error(),
+		Time:      uint(m.Time.Unix()),
+		Source:    hostname,
 		Docker: DockerInfo{
 			Name:     m.Container.Name,
 			ID:       m.Container.ID,
@@ -97,8 +97,9 @@ type DockerInfo struct {
 
 // LogstashMessage is a simple JSON input to Logstash.
 type JSONMessage struct {
-	Message map[string]interface{} `json:"message"`
-	Time    uint                   `json:"time"`
-	Source  string                 `json:"source"`
-	Docker  DockerInfo             `json:"docker"`
+	Message   map[string]interface{} `json:"message"`
+	Time      uint                   `json:"time"`
+	Source    string                 `json:"source"`
+	Docker    DockerInfo             `json:"docker"`
+	JSONError string                 `json:"json_error"`
 }
